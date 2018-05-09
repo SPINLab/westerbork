@@ -14,6 +14,8 @@
     <link rel="stylesheet" type="text/css" href="./libs/openlayers3/ol.css">
     <link rel="stylesheet" type="text/css" href="./libs/spectrum/spectrum.css">
     <link rel="stylesheet" type="text/css" href="./libs/jstree/themes/mixed/style.css">
+
+    <link rel="stylesheet" href="./app/app.css">
 </head>
 
 <body>
@@ -21,7 +23,10 @@
     <script src="./libs/spectrum/spectrum.js"></script>
     <script src="./libs/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
     <script src="./libs/jquery-ui/jquery-ui.min.js"></script>
+
     <script src="./libs/three.js/build/three.min.js"></script>
+    <script src="./libs/three.js/build/ColladaLoader.js"></script>
+
     <script src="./libs/other/BinaryHeap.js"></script>
     <script src="./libs/tween/tween.min.js"></script>
     <script src="./libs/d3/d3.js"></script>
@@ -33,7 +38,17 @@
     <script src="./libs/plasio/js/laslaz.js"></script>
 
     <div class="potree_container" style="position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; ">
-        <div id="potree_render_area"></div>
+        <div id="potree_render_area">
+            <div class='infobox' id='photoInfo'>
+                <h1 id='photoTitle'></h1>
+                <p id='photoText'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                    magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+                    anim id est laborum.
+                </p>
+            </div>
+        </div>
         <div id="potree_sidebar_container"> </div>
     </div>
 

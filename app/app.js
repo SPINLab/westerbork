@@ -2,7 +2,7 @@ window.viewer = new Potree.Viewer(
     document.getElementById('potree_render_area')
 );
 
-viewer.setEDLEnabled(true);
+viewer.setEDLEnabled(false);
 viewer.setFOV(60);
 viewer.setPointBudget(6 * 1000 * 1000);
 viewer.loadSettingsFromURL();
@@ -11,10 +11,10 @@ viewer.setDescription('');
 
 viewer.loadGUI(() => {
     viewer.setLanguage('en');
-    $('#menu_appearance')
+    $('#menu_scene')
         .next()
         .show();
-    //viewer.toggleSidebar();
+    viewer.toggleSidebar();
 });
 
 Potree.loadPointCloud(
@@ -44,3 +44,96 @@ Potree.loadPointCloud(
         viewer.setMoveSpeed(1);
     }
 );
+
+const loadingManager = new THREE.LoadingManager();
+const loader = new THREE.ColladaLoader(loadingManager);
+
+const photos = [];
+for (let i = 1; i < 7; i++) {
+    const name = 'foto_0' + i;
+    loader.load('../data/' + name + '.dae', function(collada) {
+        collada.library.materials;
+        for (const materialObject in collada.library.materials) {
+            if (collada.library.materials.hasOwnProperty(materialObject)) {
+                const material = collada.library.materials[materialObject];
+                material.build.shininess = 0;
+            }
+        }
+        const model = collada.scene;
+        model.rotation.set(0, 0, 0);
+
+        viewer.scene.scene.add(model);
+        photos.push(model);
+
+        viewer.onGUILoaded(() => {
+            const tree = $(`#jstree_scene`);
+
+            let photoID = tree.jstree(
+                'create_node',
+                'other',
+                {
+                    text: name,
+                    icon: `${Potree.resourcePath}/icons/triangle.svg`,
+                    data: model
+                },
+                'last',
+                false,
+                false
+            );
+            tree.jstree(model.visible ? 'check_node' : 'uncheck_node', photoID);
+        });
+    });
+}
+
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+document.addEventListener('mousedown', onDocumentMouseDown, false);
+document.addEventListener('touchstart', onDocumentTouchStart, false);
+
+function onDocumentTouchStart(event) {
+    event.preventDefault();
+
+    event.clientX = event.touches[0].clientX;
+    event.clientY = event.touches[0].clientY;
+    onDocumentMouseDown(event);
+}
+
+const particleMaterial = new THREE.SpriteMaterial({
+    color: 0x000000,
+    program: function(context) {
+        context.beginPath();
+        context.arc(0, 0, 0.5, 0, PI2, true);
+        context.fill();
+    }
+});
+
+function onDocumentMouseDown(event) {
+    event.preventDefault();
+    const canvasPosition = viewer.renderer.domElement.getBoundingClientRect();
+
+    mouse.x =
+        (event.clientX - canvasPosition.left) /
+            viewer.renderer.domElement.clientWidth *
+            2 -
+        1;
+    mouse.y =
+        -(
+            (event.clientY - canvasPosition.top) /
+            viewer.renderer.domElement.clientHeight
+        ) *
+            2 +
+        1;
+
+    raycaster.setFromCamera(mouse, viewer.scene.cameraP);
+
+    const intersects = raycaster.intersectObjects(photos, true);
+
+    if (intersects.length > 0) {
+        $('#photoInfo').css('visibility', 'visible');
+        $('#photoTitle').text(intersects[0].object.name);
+        // $('#photoText').text();
+    } else {
+        $('#photoInfo').css('visibility', 'hidden');
+    }
+}

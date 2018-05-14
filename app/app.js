@@ -116,7 +116,7 @@ function onDocumentMouseDown(event) {
             2 +
         1;
 
-    raycaster.setFromCamera(mouse, viewer.scene.cameraP);
+    raycaster.setFromCamera(mouse, viewer.scene.getActiveCamera());
 
     const intersects = raycaster.intersectObjects(photos, true);
 

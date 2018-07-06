@@ -99,15 +99,6 @@ function onDocumentTouchStart(event) {
     onDocumentMouseDown(event);
 }
 
-const particleMaterial = new THREE.SpriteMaterial({
-    color: 0x000000,
-    program: function(context) {
-        context.beginPath();
-        context.arc(0, 0, 0.5, 0, PI2, true);
-        context.fill();
-    }
-});
-
 function onDocumentMouseDown(event) {
     event.preventDefault();
     const canvasPosition = viewer.renderer.domElement.getBoundingClientRect();
@@ -125,7 +116,7 @@ function onDocumentMouseDown(event) {
             2 +
         1;
 
-    raycaster.setFromCamera(mouse, viewer.scene.cameraP);
+    raycaster.setFromCamera(mouse, viewer.scene.getActiveCamera());
 
     const intersects = raycaster.intersectObjects(photos, true);
 

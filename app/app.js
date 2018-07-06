@@ -18,7 +18,7 @@ viewer.loadGUI(() => {
 });
 
 Potree.loadPointCloud(
-    'greyhound://geo.labs.vu.nl:8080/resource/driekamers/',
+    'greyhound://https://geo.labs.vu.nl/westerbork/pointcloud/resource/driekamers/',
     'driekamers',
     function(e) {
         viewer.scene.addPointCloud(e.pointcloud);
@@ -51,7 +51,7 @@ const loader = new THREE.ColladaLoader(loadingManager);
 const photos = [];
 for (let i = 1; i < 7; i++) {
     const name = 'foto_0' + i;
-    loader.load('../data/' + name + '.dae', function(collada) {
+    loader.load('data/' + name + '.dae', function(collada) {
         collada.library.materials;
         for (const materialObject in collada.library.materials) {
             if (collada.library.materials.hasOwnProperty(materialObject)) {

@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+    reverseproxy:
+        image: nginx:alpine
+        volumes:
+            - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+        ports:
+            - 127.0.0.1:8081:80
+        restart: always
+  
+    pointcloud-service:
+        image: connormanning/greyhound
+        volumes: 
+            - ./config/greyhound:/config:ro
+            - ./data:/data:ro
+        command: ["-c", "/config/greyhound-config.json"]
+        depends_on:
+            - reverseproxy
+        restart: always
+
+    website-service:
+        image: nginx:alpine
+        volumes:
+            - ./viewer/:/usr/share/nginx/html/:ro
+        depends_on:
+            - reverseproxy
+        restart: always

@@ -1,0 +1,14 @@
+{
+    "cacheSize": "500 MB",
+    "threads": 2,
+    "paths": ["/data/"],
+    "resourceTimeoutMinutes": 30,
+    "http": {
+        "port": 8080,
+        "headers": {
+            "Cache-Control":                  "public, max-age=300",
+            "Access-Control-Allow-Origin":    "*",
+            "Access-Control-Allow-Methods":   "GET,PUT,POST,DELETE"
+        }
+    }
+}
